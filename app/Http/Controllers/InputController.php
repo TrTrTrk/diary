@@ -5,17 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use OpenAI\Laravel\Facades\OpenAI;
 use PhpParser\Builder\Function_;
+use Intervention\Image\Facades\Image;
 
 class InputController extends Controller
 {
+
+    private $path = 'app/public'; //保存場所として大丈夫？
+
     public function input()
     {
         // inputLineCountはユーザー設定の入力行数
-        // 20230338 今は5に固定
-        return view('diaryinput', ['inputLineCount' => range(0, 4)]);
+        // 20230338 今は5個に固定
+        return view('input', ['inputLineCount' => range(0, 4)]);
     }
 
-    
+
     //テキストボックスの入力がすべてある前提
     private function getSentences(Request $request)
     {
@@ -36,9 +40,10 @@ class InputController extends Controller
     {
 
         //テキスト・チェックボックスにvalidationをかけよう！
+
         $prompt = $this->getSentences($request);
 
-        var_dump($request->toArray());
+        // var_dump($request->toArray());
 
         $response = OpenAI::images()->create([
             'prompt' => $prompt . " 絵画風",
@@ -47,10 +52,17 @@ class InputController extends Controller
             'response_format' => 'url',
         ]);
 
-        var_dump($response);
+        $url = $response->data[0]->url;
+        
+        $file_name = time();//現在のUnixタイムスタンプを利用してファイル名をつける
 
-        // foreach($response->data as $result) {
-        // }
+        $file_path = storage_path($this->path . $file_name); //保存場所として大丈夫？
+        
+        Image::make($url)->save($file_path);
+
+        return ;
+
+        // var_dump($response);
 
     }
 }

@@ -2,8 +2,6 @@
 
 @section('title', 'picture diary')
 
-@section('header')
-
 @section('main')
 
     <div>

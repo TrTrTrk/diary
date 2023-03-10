@@ -8,6 +8,6 @@ class MainController extends Controller
 {
     public function main()
     {
-        return view('diarylist');        
+        return view('list');        
     }
 }
