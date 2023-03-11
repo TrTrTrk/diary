@@ -4,7 +4,7 @@
 
 @section('main')
     <div>
-
+        <a href="input">make diary</a>
     </div>
 @endsection
 

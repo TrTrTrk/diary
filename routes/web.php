@@ -19,8 +19,12 @@ Route::get('input', 'App\Http\Controllers\InputController@input');
 
 Route::post('submit', 'App\Http\Controllers\InputController@submit');
 
-Route::post('disp', 'App\Http\Controllers\DispController@disp');
+// Route::post('disp', 'App\Http\Controllers\DispController@disp');
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

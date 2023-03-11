@@ -2,18 +2,21 @@
 
 @section('title', 'picture diary')
 
-@section('header')
-    @parent
-    <nav>
-        <ul class="clearfix">
-            {{-- <li class="current"><a class="link" href="/">HOME</a></li> --}}
-            <li><a class="link" href="input">New Diary</a></li>
-        </ul>
-    </nav>
-@endsection
-
 @section('main')
-
+    <div>
+        {{-- <img src="{{ storage_path('app/public/{{ $file_name }}') }}" alt=""> --}}
+        <div>
+            <img src="{{ asset("storage/{$file_path}") }}" alt="">
+        </div>
+        <div style="writing-mode: vertical-rl;">
+            @foreach ($inputLineCount as $count)
+                <p >{{ $sentences[$count] }}</p>
+            @endforeach
+        </div>
+        <div>
+            <a href="/">confirm</a>
+        </div>
+    </div>
 @endsection
 
 @section('footer')
