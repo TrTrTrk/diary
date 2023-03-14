@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'App\Http\Controllers\MainController@main');
 
-Route::get('input', 'App\Http\Controllers\InputController@input');
+Route::get('/input', 'App\Http\Controllers\InputController@input');
 
-Route::post('submit', 'App\Http\Controllers\InputController@submit');
+Route::post('/submit', 'App\Http\Controllers\InputController@submit');
 
 // Route::post('disp', 'App\Http\Controllers\DispController@disp');
 
