@@ -12,7 +12,7 @@ class InputRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if ($this->path() == 'submit')
+        if ($this->path() == 'make-disp')
         {
             return true;            
         }

@@ -1,9 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <input-component
-        :input-line-count='@json($Counts)'>
-    </input-component>
+    <make-disp-component :file-path='@json($filePath)' :sentences='@json($sentences)' :input-line-count='@json($inputLineCount)'>    </make-disp-component>
 @endsection
 
 @section('footer')

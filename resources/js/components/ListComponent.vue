@@ -1,0 +1,29 @@
+<template>
+    <div class="container">
+        <div class="row justify-content-center" v-if="isLogin">
+            <div class="col-md-8"></div>
+            <div class="col-md-4 text-center">
+                <a class="btn btn-primary" href="/input">make diary</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-4 text-center" v-for="(picItem, index) in picItems" :key="index">
+                <img :src='"storage/" + picItem.id + "/" + picItem.imageName' alt="" />
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        picItems: Array,
+        isLogin: Boolean
+    },
+    mounted() {
+        console.log('Component mounted.')
+    }
+}
+</script>

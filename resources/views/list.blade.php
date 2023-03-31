@@ -1,40 +1,10 @@
-@extends('layout.picturediary')
+@extends('layouts.app')
 
-@section('title', 'picture diary')
-
-@section('main')
-    <div class="container">
-        <div>
-            @if (Auth::Check())
-                <p>User: {{ $user->name }}</p>
-            @else
-                <p>No Login (<a href="/login">Login</a> <a href="/register">regist</a>)</p>
-            @endif
-        </div>
-        <div>
-            @if (Auth::Check())
-                <a href="/input">make diary</a>
-            @endif
-        </div>
-        <div>
-            {{-- このループがVueの構文になる。 --}}
-            @foreach ($collection as $item)
-
-                @if ($loop->index % 3 == 0)
-                    <div class="row">
-                @endif
-
-                <div class="col-md-4">
-                    <img src="" alt="">
-                </div>
-
-                @if ($loop->index % 3 == 0)
-                    </div>
-                @endif
-        @endforeach
-
-    </div>
-
+@section('content')
+    <list-component 
+        :pic-items='@json($items)' 
+        :is-login='@json(Auth::check())'>
+    </list-component>
 @endsection
 
 @section('footer')
