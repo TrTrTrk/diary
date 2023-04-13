@@ -13,6 +13,10 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+    {{-- 以下二つは、Input画面で使う --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>   
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>

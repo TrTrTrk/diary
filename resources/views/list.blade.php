@@ -1,10 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <list-component 
-        :pic-items='@json($items)' 
-        :is-login='@json(Auth::check())'>
-    </list-component>
+    <list-component :pic-items='@json($items)' :is-login='@json(Auth::check())'></list-component>
 @endsection
 
 @section('footer')

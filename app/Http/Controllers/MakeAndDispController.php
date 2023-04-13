@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use OpenAI\Laravel\Facades\OpenAI;
-use App\Http\Requests\InputRequest;
 use Exception;
 // use Illuminate\Support\Facades\DB;
 use DB;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\InputRequest;
 
 class MakeAndDispController extends Controller
 {
@@ -74,44 +74,94 @@ class MakeAndDispController extends Controller
 
         return $file_name;
     }
-
-    public function makepic(Request $request)
+    
+    public function makepic(InputRequest $request)
     {
 
-        $array = $request->input('texts');
+        $texts = $request->input('texts');
 
         $prompt = $this->getSentences($request); //画像にしたい文章を取得する
 
         $file_name = $this->getImageFromOpenAi($prompt);
 
         session()->put("filename", $file_name);
+        session()->put("texts", $texts);
 
         $user = Auth::user();
-
-        $file_path = $user->id . "/" . $file_name;
 
         return view(
             'make-disp',
             [
-                'filePath' => $file_path,
-                'sentences' => $array,
-                'inputLineCount' => range(0, $this->sentencesCount - 1)
+                'fileName' => $file_name,
+                'dirName' => $user->id,
+                'sentences' => $texts,
+                'inputLineCount' => range(0, $this->sentencesCount - 1),
+                'route' => __FUNCTION__,
+                'isUser' => false
+            ]
+        );
+    }
+
+    public function disp(Request $request)
+    {
+
+        $file_name = $request->imageName; //URLクエリの値をとる
+
+        if (empty($file_name)) {
+            return redirect()->route('/');
+        }
+
+        $sentences = DB::table('sentences')->Where('imageName', $file_name)->get(['sentences']);
+
+        if ($sentences->isnotEmpty()) {
+            $sentences = $sentences[0]->sentences;
+        } else {
+            $sentences = "";
+        }
+
+        $target_sentences = explode("\\n", $sentences);
+
+        $user = DB::table('images')->Where('imageName', $file_name)->get('id');
+
+        // sentencesCountは、$sentencesの\n個数+1にする。
+
+        return view(
+            'make-disp',
+            [
+                'fileName' => $file_name,
+                'dirName' => $user[0]->id,
+                'sentences' => $target_sentences,
+                'inputLineCount' => range(0, $this->sentencesCount - 1),
+                'route' => __FUNCTION__,
+                'isUser' => $user[0]->id == Auth::id() ? true : false,
             ]
         );
     }
 
     public function create(Request $request)
     {
+        $user_id = Auth::user()->id;
+
         $file_name = session('filename');
 
-        session()->forget('filename');
-
-        $param = [
-            "id" => Auth::user()->id,
+        $param_images = [
+            "id" => $user_id,
             "imageName" => $file_name,
         ];
 
-        DB::table('images')->insert($param);
+        $texts = session('texts');
+
+        $param_sentences = [
+            "imageName" => $file_name,
+            "sentences" => implode('\n', $texts),
+        ];
+
+        if (DB::table('images')->insert($param_images) && DB::table('sentences')->insert($param_sentences)) {
+            session()->forget('filename');
+            session()->forget('texts');
+        } else {
+            throw Exception("Fail Insert to Database");
+        }
 
         return redirect()->route("main");
     }
@@ -125,7 +175,27 @@ class MakeAndDispController extends Controller
         if (!Storage::disk('public')->delete(Auth::user()->id . "/" . $file_name)) {
 
             throw Exception("Delete Image File Failed");
+        }
 
+        return redirect()->route("main");
+    }
+
+    public function delete(Request $request)
+    {
+
+        $file_name = $request->imageName; //URLクエリの値をとる
+        $dir_name = $request->dirName; //URLクエリの値をとる
+
+        if (empty($file_name)) {
+            return redirect()->route('/');
+        }
+
+        if (
+            !DB::table('images')->where('imagename', $file_name)->delete() > 0 ||
+            !DB::table('sentences')->where('imagename', $file_name)->delete() > 0 ||
+            !Storage::disk('public')->delete($dir_name . "/" . $file_name)
+        ) {
+            throw Exception("Delete Image file Failed");
         }
 
         return redirect()->route("main");

@@ -9,8 +9,13 @@
     </div>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-4 text-center" v-for="(picItem, index) in picItems" :key="index">
-                <img :src='"storage/" + picItem.id + "/" + picItem.imageName' alt="" />
+            <div class="col-md-4 text-center my-2" v-for="(picItem, index) in picItems" :key="index">
+                <div class="card">
+                    <a :href='"/disp?imageName=" + picItem.imageName'>
+                        <img class="border border-dark" :src='"storage/" + picItem.id + "/" + picItem.imageName'
+                            :alt="picItem.sentences" />
+                    </a>
+                </div>
             </div>
         </div>
     </div>

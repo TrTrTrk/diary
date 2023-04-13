@@ -23,13 +23,12 @@ class MainController extends Controller
 
     public function main(Request $request)
     {
-        // $user = Auth::user(); //ログインユーザー
-
-        // $filePathes = $this->getImagePathes(); //特定フォルダ下の画像データを取得
-
-        //DBから各画像の文章を取得する
-        // $items = DB::select('select id, imageName from images Order by created_at LIMIT 10;');
-        $items = DB::table('images')->orderBy('created_at')->limit(10)->get(['id','imageName']);
+       
+        $items =  DB::table('images')
+                    ->leftjoin('sentences', 'images.imageName', '=', 'sentences.imageName')
+                    ->orderBy('images.created_at')
+                    ->limit(30)
+                    ->get(['id','images.imageName','sentences']);
 
         return view('list', compact("items"));
     }

@@ -17,12 +17,12 @@ const app = createApp({});
 
 import ExampleComponent from './components/ExampleComponent.vue';
 import ListComponent from './components/ListComponent.vue';
-import InputComponent from './components/InputComponent.vue';
+// import InputComponent from './components/InputComponent.vue';
 import MakeAndDispComponent from './components/MakeAndDispComponent.vue';
 
 app.component('example-component', ExampleComponent);
 app.component('list-component', ListComponent);
-app.component('input-component', InputComponent);
+// app.component('input-component', InputComponent);
 app.component('make-disp-component', MakeAndDispComponent);
 
 /**
