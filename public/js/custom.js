@@ -1,6 +1,6 @@
 function showLoading() {
     // Spinnerを表示するためのHTMLを生成
-    var spinnerHtml = '<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>';
+    var spinnerHtml = '<div class="spinner-border text-primary" role="status"><span class="sr-only"></span></div>';
 
     // 背景にオーバーレイを追加
     var overlay = $('<div class="overlay"></div>');

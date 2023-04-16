@@ -26,7 +26,8 @@ class MainController extends Controller
        
         $items =  DB::table('images')
                     ->leftjoin('sentences', 'images.imageName', '=', 'sentences.imageName')
-                    ->orderBy('images.created_at')
+                    // ->orderBy('images.created_at')
+                    ->inRandomOrder()
                     ->limit(30)
                     ->get(['id','images.imageName','sentences']);
 

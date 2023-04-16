@@ -74,7 +74,7 @@ class MakeAndDispController extends Controller
 
         return $file_name;
     }
-    
+
     public function makepic(InputRequest $request)
     {
 
@@ -88,6 +88,10 @@ class MakeAndDispController extends Controller
         session()->put("texts", $texts);
 
         $user = Auth::user();
+
+        DB::table('users')
+            ->where('id', $user->id)
+            ->decrement('create_count');
 
         return view(
             'make-disp',
