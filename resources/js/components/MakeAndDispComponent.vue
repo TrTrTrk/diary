@@ -36,7 +36,7 @@ export default {
 
     props: {
         fileName: String,
-        dirName: String,
+        dirName: Number,
         sentences: Array,
         inputLineCount: Array,
         route: String,
