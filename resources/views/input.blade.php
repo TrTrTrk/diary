@@ -11,17 +11,19 @@
         <div class="row justify-content-center">
             <div class="col-auto">
                 <p>描きたい文章にチェックを入れます</p>
+            </div>
+            <div class="col-auto">
                 @foreach ($errors->all() as $error)
-                    {{ $error }}
+                    <span class="help-block">{{ $error }}</span>
                 @endforeach
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-auto">
                 @if ($create_count > 0)
-                    <p>あと<b><strong>{{ $create_count }}</strong></b>回生成できます</p>
+                    <p>あと<b>{{ $create_count }}</b>回生成できます</p>
                 @else
-                    <p>生成できません</p>
+                    <p>上限回数を超えました。生成できません</p>
                 @endif
             </div>
         </div>
