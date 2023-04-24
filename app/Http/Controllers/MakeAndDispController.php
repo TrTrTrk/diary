@@ -11,6 +11,10 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\InputRequest;
+use Carbon\Carbon;
+use SebastianBergmann\CliParser\Exception as CliParserException;
+
+use function PHPUnit\Framework\throwException;
 
 class MakeAndDispController extends Controller
 {
@@ -59,12 +63,17 @@ class MakeAndDispController extends Controller
                 'response_format' => 'url',
             ]);
         } catch (FailedRequestException $e) {
-            return response()->json(['error' => 'Failed to generate image.']);
+            throw $e;
+            // return response()->json(['error' => 'Failed to generate image.']);
+        } catch (Exception $e) {
+            throw $e;
+            // return response()->json(['error' => $e->getMessage()]);
         }
 
         $url = $response->data[0]->url;
 
-        $file_name = time() . ".png"; //現在のUnixタイムスタンプを利用してファイル名をつける
+        // time() 現在のUnixタイムスタンプを利用してファイル名をつける
+        $file_name = Carbon::now()->format('U.u') . ".png";
 
         $userId = $this->getUserId();
 
@@ -82,7 +91,12 @@ class MakeAndDispController extends Controller
 
         $prompt = $this->getSentences($request); //画像にしたい文章を取得する
 
-        $file_name = $this->getImageFromOpenAi($prompt);
+        try {
+            $file_name = $this->getImageFromOpenAi($prompt);
+        } catch (exception $e) {
+            $message = 'リクエストは安全システムで許可されていないテキストが含まれている場合があります。';
+            return back()->withErrors(['openai_exception'=>$message]);
+        }
 
         session()->put("filename", $file_name);
         session()->put("texts", $texts);
