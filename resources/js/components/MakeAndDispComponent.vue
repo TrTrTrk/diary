@@ -2,10 +2,10 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="row my-5">
-                <div class="col text-center">
-                    <div><img :src='"storage/" + dirName + "/" + fileName' alt="" /></div>
+                <div class="col-md-6  my-2 text-center">
+                    <div><img :src='"./storage/" + dirName + "/" + fileName' alt="" /></div>
                 </div>
-                <div class="col">
+                <div class="col-md-6 my-2">
                     <p name="sentence[]" v-for="(count, index) in inputLineCount" :key="index">
                         {{ sentences[count] }}
                     </p>
