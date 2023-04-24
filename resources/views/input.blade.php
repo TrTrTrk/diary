@@ -12,12 +12,17 @@
             <div class="col-auto">
                 <p>描きたい文章にチェックを入れます</p>
             </div>
-            <div class="col-auto">
-                @foreach ($errors->all() as $error)
-                    <span class="help-block">{{ $error }}</span>
-                @endforeach
-            </div>
         </div>
+        @if ($errors->any())
+            <div class="row justify-content-center">
+                <div class="col-auto">
+                    @foreach ($errors->all() as $error)
+                        <p class="text-danger">{{ $error }}</p>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
         <div class="row justify-content-center">
             <div class="col-auto">
                 @if ($create_count > 0)
@@ -32,19 +37,18 @@
 
                 @csrf
 
-                <div class="row justify-content-center my-2">
-
+                @if ($create_count > 0)
                     @foreach ($line_counts as $item)
-                        <div class="row align-items-center my-1">
-                            <input class="col-md-2 form-check form-check-input" type="checkbox" name="checkboxes[]"
-                                value="{{ $item }}">
-                            <div class="col-md-10">
-                                <input class="form-control" type="text" name="texts[]" placeholder="">
+                        <div class="input-group mb-3">
+                            <div class="input-group-text">
+                                <input class="form-check-input mt-0" name="checkboxes[]" type="checkbox"
+                                    value="{{ $item }}" aria-label="Checkbox for following text input">
                             </div>
+                            <input type="text" name="texts[]" class="form-control" aria-label="Text input with checkbox"
+                                placeholder="">
                         </div>
                     @endforeach
-
-                </div>
+                @endif
 
                 <div class="row justify-content-center my-2">
                     <div class="col-auto">
