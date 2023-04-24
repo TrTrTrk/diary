@@ -21,16 +21,25 @@ class MainController extends Controller
         return $filePathes;
     }
 
+
     public function main(Request $request)
     {
-       
         $items =  DB::table('images')
-                    ->leftjoin('sentences', 'images.imageName', '=', 'sentences.imageName')
-                    // ->orderBy('images.created_at')
-                    ->inRandomOrder()
-                    ->limit(30)
-                    ->get(['id','images.imageName','sentences']);
+            ->leftjoin('sentences', 'images.imageName', '=', 'sentences.imageName')
+            ->when(url(), function ($query) {
+                if (strpos(url()->previous(), 'make-disp') === false) {
+                    return $query->inRandomOrder();
+                } else {
+                    return $query->orderByDesc('images.created_at');
+                }
+            })
+            ->limit(30)
+            ->get(['id', 'images.imageName', 'sentences']);
 
-        return view('list', compact("items"));
+        $user_count = DB::table('users')->get()->count();
+        
+        $can_make_pic = Auth::check() && $user_count < 30;
+
+        return view('list', compact("items","can_make_pic"));
     }
 }
