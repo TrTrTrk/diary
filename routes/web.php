@@ -17,7 +17,7 @@ use App\Http\Controllers\MainController;
 */
 
 Route::get('/', [MainController::class,'main'])->name('main');
-Route::get('/input', [InputController::class, 'input'])->middleware('auth')->name('input'); // Route::get('/input', 'App\Http\Controllers\InputController@input');
+Route::get('/input', [InputController::class, 'input'])->middleware('auth')->middleware('usercount')->name('input'); // Route::get('/input', 'App\Http\Controllers\InputController@input');
 Route::post('/make-disp', [MakeAndDispController::class, 'makepic'])->middleware('auth')->name('make-disp'); // Route::post('/submit', 'App\Http\Controllers\InputController@submit');
 Route::get('/disp', [MakeAndDispController::class, 'disp'])->name('disp'); // Route::post('/submit', 'App\Http\Controllers\InputController@submit');
 Route::get('/delete', [MakeAndDispController::class, 'delete'])->name('delete'); // Route::post('/submit', 'App\Http\Controllers\InputController@submit');
